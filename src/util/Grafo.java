@@ -47,30 +47,66 @@ public class Grafo <V,A,P>{
         return ret.isEmpty() ? null : ret;
     }
 
-    ArrayList<A> arestasEntre(Vertice origem, Vertice destino){
+    ArrayList<A> arestasEntre(V origem, V destino){
+        
         return null;
     }
 
-    boolean existeAresta(Vertice origem, Vertice destino){
+    //Metodo que verifica se extiste uma aresta entre os vertices
+    boolean existeAresta(V origem, V destino) throws NotVerticeException{ 
+        int indexOrigem = vertices.indexOf(origem);
+        int indexDestino = vertices.indexOf(destino);
+        
+        if(indexOrigem < 0 || indexDestino < 0)
+            throw new NotVerticeException();
+        
+        for(Aresta a : arestas){
+            if( a.origem.equals(origem)&& a.destino.equals(destino) ){
+                return true;
+            }
+        }
         return false;
     }
 
-    int grauDoVertice(Vertice vertice){
-        return 0;
+    int grauDoVertice(V vertice) throws NotVerticeException{
+ 
+        if(!vertices.contains(vertice))
+            throw new NotVerticeException();
+        
+        int num = 0;
+        
+        for(Aresta a: arestas){
+            if(a.destino.equals(vertice)){
+                num++;
+            }
+        }
+        return num;
     }
 
     int numeroDeArestas(){
-        return 0;
+        return arestas.size();
     }
 
     int numeroDeVertices(){
-        return 0;
+        return vertices.size();
     }
 
-    void setarPeso(Vertice origem, Vertice destino, double peso){}
+    void setarPeso(Vertice origem, Vertice destino, P peso) throws NotVerticeException{
+        int indexOrigem = vertices.indexOf(origem);
+        int indexDestino = vertices.indexOf(destino);
+        
+        if(indexOrigem < 0 || indexDestino < 0)
+            throw new NotVerticeException();
+        
+        for(Aresta a : arestas){
+            if(a.origem.equals(origem) && a.destino.equals(destino)){
+                a.setPeso(peso);
+            }
+        }
+    }
 
     ArrayList<V> vertices(){
-        return null;
+        return (ArrayList<V>) vertices;
     }
     
     private class Vertice {
