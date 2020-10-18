@@ -31,22 +31,21 @@ public class GrafoTest {
 
     @Test
     public void testaddContainsVertice() throws Exception {
-        Grafo<String,String> grafo = new Grafo();
-        System.out.println("addVertice");
+        Grafo<String> grafo = new Grafo();
         String v1 = "Vertice1";
         
-        assertEquals(grafo.numeroDeVertices(),0);
+        assertEquals(0, grafo.numeroDeVertices());
         
         grafo.addVertice(v1);
         
-        assertEquals(grafo.numeroDeVertices(),1);
+        assertEquals(1, grafo.numeroDeVertices());
         
         ArrayList<String> vertices = grafo.vertices();
         assertTrue(vertices.contains(v1));
         String v2 = "Vertice2";
         grafo.addVertice(v2);
         
-        assertEquals(grafo.numeroDeVertices(),2);
+        assertEquals(2, grafo.numeroDeVertices());
         
         vertices = grafo.vertices();
         
@@ -66,27 +65,26 @@ public class GrafoTest {
      */
     @Test
     public void testArestas() throws Exception {
-        Grafo<String,String> grafo = new Grafo();
-        System.out.println("addAresta");
+        Grafo<String> grafo = new Grafo();
         String origem = "Vertice1";
         String destino = "Vertice2";
         String peso1 = "PesoAresta1";
         grafo.addVertice(origem);
         grafo.addVertice(destino);
         
-        assertEquals(grafo.numeroDeArestas(),0);
+        assertEquals(0, grafo.numeroDeArestas());
         
         grafo.addAresta(origem, destino, peso1);
         
-        assertEquals(grafo.numeroDeArestas(),1);
+        assertEquals(1, grafo.numeroDeArestas());
         assertTrue(grafo.existeAresta(origem, destino));
         assertTrue(grafo.adjacentesDe(origem).contains(destino));
-        assertEquals(grafo.adjacentesDe(origem).size(),1);
-        assertEquals(grafo.adjacentesDe(destino),null);
+        assertEquals(1, grafo.adjacentesDe(origem).size());
+        assertEquals(null, grafo.adjacentesDe(destino));
         assertTrue(grafo.arestasEntre(origem, destino).get(0).getPeso().equals(peso1));
         assertTrue(grafo.arestasEntre(origem, destino).get(0).getDestino().equals(destino));
         assertTrue(grafo.arestasEntre(origem, destino).get(0).getOrigem().equals(origem));
-        assertEquals(grafo.arestasEntre(origem, destino).size(),1);
+        assertEquals(1, grafo.arestasEntre(origem, destino).size());
         
     }
 
@@ -95,16 +93,15 @@ public class GrafoTest {
      */
     @Test
     public void testGrauDoVertice() throws Exception {
-        Grafo<String,String> grafo = new Grafo();
-        System.out.println("addAresta");
+        Grafo<String> grafo = new Grafo();
         String origem = "Vertice1";
         String destino = "Vertice2";
         String peso1 = "PesoAresta1";
         grafo.addVertice(origem);
         grafo.addVertice(destino);
         grafo.addAresta(origem, destino, peso1);
-        assertEquals(grafo.grauDoVertice(destino), 1);
-        assertEquals(grafo.grauDoVertice(origem), 0);
+        assertEquals(1, grafo.grauDoVertice(destino));
+        assertEquals(0, grafo.grauDoVertice(origem));
     }
     
 }
