@@ -6,18 +6,30 @@ import java.util.Objects;
 
 
 
-public class Grafo <V,A,P>{
+public class Grafo <V,P>{
     
-    ArrayList<Vertice> vertices;
-    ArrayList<Aresta> arestas;
+    private final ArrayList<V> vertices;
+    private final ArrayList<Aresta> arestas;
 
     public Grafo() {
         vertices = new ArrayList();
         arestas = new ArrayList();
     }
     
+    public void addVertice(V vertice) throws NotVerticeException{
+        if(vertice == null)
+            throw new NotVerticeException();
+        if(vertices.contains(vertice))
+            return;
+        vertices.add(vertice);
+    }
+    
+    public boolean containsVertice(V vertice){
+        return vertices.contains(vertice);
+    }
+    
     //Metodo para adicionar arrestas na lista de arestas
-    void adicionarAresta(V origem, V destino, P peso) throws NotVerticeException{
+    public void addAresta(V origem, V destino, P peso) throws NotVerticeException{
         int indexOrigem = vertices.indexOf(origem);
         int indexDestino = vertices.indexOf(destino);
         
@@ -28,32 +40,38 @@ public class Grafo <V,A,P>{
         
         arestas.add(a);         
     }
+    
+    
 
-    //Metodo que ira retornar uma lista de adjacencias apartir de uma origem
-    ArrayList<V> adjacentesDe(V origem) throws NotVerticeException{
+    //Metodo que irá retornar uma lista de adjacencias apartir de uma origem
+    public ArrayList<V> adjacentesDe(V origem) throws NotVerticeException{
         int indexOrigem = vertices.indexOf(origem);
         
         if(indexOrigem < 0)
             throw new NotVerticeException();
         
-        ArrayList ret = new ArrayList();
+        ArrayList<V> ret = new ArrayList();
         
         for(Aresta a : arestas){
             if(a.origem.equals(origem)){
-                if(!ret.contains(a))
-                    ret.add(a);
+                if(!ret.contains(a.destino))
+                    ret.add(a.destino);
             }
         }
         return ret.isEmpty() ? null : ret;
     }
 
-    ArrayList<A> arestasEntre(V origem, V destino){
-        
-        return null;
+    public ArrayList<Aresta> arestasEntre(V origem, V destino){
+        ArrayList<Aresta> ret = new ArrayList();
+        arestas.forEach((a)->{
+            if(a.origem.equals(origem) && a.destino.equals(destino) )
+                ret.add(a);
+        });
+        return ret.isEmpty()?null:ret;
     }
 
-    //Metodo que verifica se extiste uma aresta entre os vertices
-    boolean existeAresta(V origem, V destino) throws NotVerticeException{ 
+    //Método que verifica se extiste uma aresta entre os vertices
+    public boolean existeAresta(V origem, V destino) throws NotVerticeException{ 
         int indexOrigem = vertices.indexOf(origem);
         int indexDestino = vertices.indexOf(destino);
         
@@ -68,7 +86,7 @@ public class Grafo <V,A,P>{
         return false;
     }
 
-    int grauDoVertice(V vertice) throws NotVerticeException{
+    public int grauDoVertice(V vertice) throws NotVerticeException{
  
         if(!vertices.contains(vertice))
             throw new NotVerticeException();
@@ -83,105 +101,64 @@ public class Grafo <V,A,P>{
         return num;
     }
 
-    int numeroDeArestas(){
+    public int numeroDeArestas(){
         return arestas.size();
     }
 
-    int numeroDeVertices(){
+    public int numeroDeVertices(){
         return vertices.size();
     }
 
-    void setarPeso(Vertice origem, Vertice destino, P peso) throws NotVerticeException{
-        int indexOrigem = vertices.indexOf(origem);
-        int indexDestino = vertices.indexOf(destino);
-        
-        if(indexOrigem < 0 || indexDestino < 0)
-            throw new NotVerticeException();
-        
-        for(Aresta a : arestas){
-            if(a.origem.equals(origem) && a.destino.equals(destino)){
-                a.setPeso(peso);
-            }
-        }
-    }
+// Método não funcional em multigrafos
+   //
+   // 
+//    void setarPeso(Vertice origem, Vertice destino, P peso) throws NotVerticeException{
+//        int indexOrigem = vertices.indexOf(origem);
+//        int indexDestino = vertices.indexOf(destino);
+//        
+//        if(indexOrigem < 0 || indexDestino < 0)
+//            throw new NotVerticeException();
+//        
+//        for(Aresta a : arestas){
+//            if(a.origem.equals(origem) && a.destino.equals(destino)){
+//                a.setPeso(peso);
+//            }
+//        }
+//    }
 
-    ArrayList<V> vertices(){
-        return (ArrayList<V>) vertices;
-    }
-    
-    private class Vertice {
-        
-        private int id;
-        private V vertice;
-        
-        public Vertice(int id, V vertice){
-            this.id = id;
-            this.vertice = vertice;
-        }
-
-        public int getId() {
-            return id;
-        }
-
-        public void setId(int id) {
-            this.id = id;
-        }
-
-        public V getVertice() {
-            return vertice;
-        }
-
-        public void setVertice(V vertice) {
-            this.vertice = vertice;
-        }
-
-   
-        @Override
-        public boolean equals(Object obj) {
-            if(obj.getClass() == this.getClass()){
-                return this.vertice.equals(((Vertice) obj).vertice);
-            }
-            if(obj.getClass() == this.vertice.getClass()){
-                return obj.equals(this.vertice);
-            }
-            return false;
-        }
-
-        @Override
-        public int hashCode() {
-            int hash = 7;
-            hash = 89 * hash + Objects.hashCode(this.vertice);
-            return hash;
-        }
-
-        
+    public ArrayList<V> vertices(){
+        ArrayList<V> ret = new ArrayList();
+        vertices.forEach((v) -> {
+            ret.add(v);
+        });
+        return ret.isEmpty()?null:ret;
     }
     
-    private class Aresta {
+    public class Aresta {
         
-        private Vertice origem;
-        private Vertice destino;
+        private V origem;
+        private V destino;
         private P peso;
 
-        public Aresta(Vertice origem, Vertice destino, P peso) {
+        public Aresta(V origem, V destino, P peso) {
             this.origem = origem;
             this.destino = destino;
             this.peso = peso;
         }
 
-        public Vertice getOrigem() {
+        public V getOrigem() {
             return origem;
         }
 
-        public void setOrigem(Vertice origem) {
+        public void setOrigem(V origem) {
             this.origem = origem;
         }
 
-        public Vertice getDestino() {
+        public V getDestino() {
             return destino;
         }
 
-        public void setDestino(Vertice destino) {
+        public void setDestino(V destino) {
             this.destino = destino;
         }
 
