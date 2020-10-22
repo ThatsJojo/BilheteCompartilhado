@@ -68,7 +68,7 @@ public class GrafoTest {
         Grafo<String> grafo = new Grafo();
         String origem = "Vertice1";
         String destino = "Vertice2";
-        String peso1 = "PesoAresta1";
+        TesteClass peso1 = new TesteClass("Peso1");
         grafo.addVertice(origem);
         grafo.addVertice(destino);
         
@@ -96,7 +96,7 @@ public class GrafoTest {
         Grafo<String> grafo = new Grafo();
         String origem = "Vertice1";
         String destino = "Vertice2";
-        String peso1 = "PesoAresta1";
+        TesteClass peso1 = new TesteClass("Peso1");
         grafo.addVertice(origem);
         grafo.addVertice(destino);
         grafo.addAresta(origem, destino, peso1);
