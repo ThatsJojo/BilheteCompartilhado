@@ -30,7 +30,7 @@ public class GrafoTest {
     }
 
     @Test
-    public void testaddContainsVertice() throws Exception {
+    public void testVertices() throws Exception {
         Grafo<String> grafo = new Grafo();
         String v1 = "Vertice1";
         
