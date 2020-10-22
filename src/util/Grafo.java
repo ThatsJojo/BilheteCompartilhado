@@ -38,7 +38,7 @@ public class Grafo <V>{
     }
     
     //Metodo para adicionar arrestas na lista de arestas
-    public void addAresta(V origem, V destino, Comparable peso) throws NotVerticeException{
+    public void addAresta(V origem, V destino, Comparable2 peso) throws NotVerticeException{
         int indexOrigem = vertices.indexOf(origem);
         int indexDestino = vertices.indexOf(destino);
         if(indexOrigem < 0 || indexDestino < 0)
@@ -117,9 +117,9 @@ public class Grafo <V>{
         
         private V origem;
         private V destino;
-        private Comparable peso;
+        private Comparable2 peso;
 
-        public Aresta(V origem, V destino, Comparable peso) {
+        public Aresta(V origem, V destino, Comparable2 peso) {
             this.origem = origem;
             this.destino = destino;
             this.peso = peso;
@@ -141,11 +141,11 @@ public class Grafo <V>{
             this.destino = destino;
         }
 
-        public Comparable getPeso() {
+        public Comparable2 getPeso() {
             return peso;
         }
 
-        public void setPeso(Comparable peso) {
+        public void setPeso(Comparable2 peso) {
             this.peso = peso;
         }
         
