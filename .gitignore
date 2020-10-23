@@ -2,3 +2,5 @@
 build.xml
 manifest.mf
 /build/
+/bin/
+/dist/

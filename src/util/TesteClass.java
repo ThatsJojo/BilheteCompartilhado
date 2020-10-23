@@ -1,6 +1,6 @@
 package util;
 
-public class TesteClass implements Comparable2{
+public class TesteClass implements Weighable{
     
     private final Comparable conteudo;
 
@@ -10,7 +10,7 @@ public class TesteClass implements Comparable2{
     
     
     @Override
-    public int absoluteCompare() {
+    public double peso() {
         return 1;
     }
 

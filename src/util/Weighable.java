@@ -1,5 +1,5 @@
 package util;
 
-public interface Comparable2 extends Comparable{
-    public int absoluteCompare();
+public interface Weighable extends Comparable{
+    public double peso();
 }
