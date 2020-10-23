@@ -135,11 +135,13 @@ public class Grafo <V>{
             calcularDistancias(maisProximo,passados,distanceMap,caminhoNegado);
         }
         ArrayList<Aresta> ret = new ArrayList<>();
+        System.out.println("\n******************************************\n");
         V v = destino;
-        while(!v.equals(origem)){
+        for(int i = 0; i<9;i++){
             Aresta a = caminhoNegado.get(v);
             ret.add(a);
             v = a.origem;
+            System.out.println("Printando V"+i+": "+v);
         }
         return ret;
     }
@@ -168,12 +170,13 @@ public class Grafo <V>{
             if(!passados.contains(a.destino)){
                 if(minimum == null)
                     minimum = a.destino;
-                distanceMap.put(vertice, distanciaBase+a.peso.peso());
-                if(distanceMap.containsKey(a.destino)&&distanceMap.get(a.destino)>a.peso.peso()+distanciaBase){
-                    distanceMap.replace(vertice, distanciaBase+a.peso.peso());
+                if(distanceMap.get(a.destino)>a.peso.peso().doubleValue()+distanciaBase.doubleValue()){
+                    distanceMap.replace(a.destino, distanciaBase.doubleValue()+a.peso.peso().doubleValue());
                     passadosAgora.add(a.destino);
+                    System.out.println("Passei em: "+ a.destino+ " Distância: " +(a.getPeso().peso().doubleValue()+distanciaBase.doubleValue()) +" DistânciaNoMapa: "+ distanceMap.get(a.destino));
                     caminhoNegado.put(a.destino, a);
                 }
+                    
             }
         }
         passadosAgora.forEach((v) -> {
@@ -236,8 +239,4 @@ public class Grafo <V>{
             this.peso = peso;
         }
     }
-    
-    
-    
-    
 }

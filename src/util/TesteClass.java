@@ -3,15 +3,17 @@ package util;
 public class TesteClass implements Weighable{
     
     private final Comparable conteudo;
+    private final Double peso;
 
-    public TesteClass(Comparable conteudo) {
+    public TesteClass(Comparable conteudo, Double peso) {
         this.conteudo = conteudo;
+        this.peso = peso;
     }
     
     
     @Override
-    public double peso() {
-        return 1;
+    public Double peso() {
+        return peso;
     }
 
     @Override
