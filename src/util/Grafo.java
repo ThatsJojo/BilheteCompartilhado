@@ -127,21 +127,24 @@ public class Grafo <V>{
             if(!vertice.equals(origem))
                 distanceMap.put(vertice, Double.MAX_VALUE);
         }
+        
         HashMap<V, Aresta> caminhoNegado = new HashMap<>();
+        
         while(!naoPassados.isEmpty()){
             V maisProximo = verticeMaisProximo(naoPassados, distanceMap);
+            System.out.println("MaisProximo: "+maisProximo);
             passados.add(maisProximo);
             naoPassados.remove(maisProximo);
             calcularDistancias(maisProximo,passados,distanceMap,caminhoNegado);
+            
         }
         ArrayList<Aresta> ret = new ArrayList<>();
         System.out.println("\n******************************************\n");
-        V v = destino;
-        for(int i = 0; i<9;i++){
-            Aresta a = caminhoNegado.get(v);
+        V o = destino;
+        while(!o.equals(origem)){
+            Aresta a = caminhoNegado.get(o);
             ret.add(a);
-            v = a.origem;
-            System.out.println("Printando V"+i+": "+v);
+            o = a.origem;
         }
         return ret;
     }
@@ -165,24 +168,16 @@ public class Grafo <V>{
         ArrayList<Aresta> arestasVizinhos = bucketArestas.get(vertices.indexOf(vertice));
         HashSet<V> passadosAgora = new HashSet<>();
         Double distanciaBase = distanceMap.get(vertice);
-        V minimum = null;
         for(Aresta a: arestasVizinhos){
             if(!passados.contains(a.destino)){
-                if(minimum == null)
-                    minimum = a.destino;
                 if(distanceMap.get(a.destino)>a.peso.peso().doubleValue()+distanciaBase.doubleValue()){
                     distanceMap.replace(a.destino, distanciaBase.doubleValue()+a.peso.peso().doubleValue());
-                    passadosAgora.add(a.destino);
-                    System.out.println("Passei em: "+ a.destino+ " Distância: " +(a.getPeso().peso().doubleValue()+distanciaBase.doubleValue()) +" DistânciaNoMapa: "+ distanceMap.get(a.destino));
                     caminhoNegado.put(a.destino, a);
                 }
+                System.out.println("Vim de "+a.origem+" "+vertice+" e Passei em: "+ a.destino+ " Distância: " +(a.getPeso().peso().doubleValue()+distanciaBase.doubleValue()) +" DistânciaNoMapa: "+ distanceMap.get(a.destino));
                     
             }
         }
-        passadosAgora.forEach((v) -> {
-            passados.add(v);
-        });
-        
     }
     
     private Aresta arestaMaisProxima(V origem, V destino){
