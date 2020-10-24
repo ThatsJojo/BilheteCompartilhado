@@ -170,11 +170,11 @@ public class Grafo <V>{
         Double distanciaBase = distanceMap.get(vertice);
         for(Aresta a: arestasVizinhos){
             if(!passados.contains(a.destino)){
-                if(distanceMap.get(a.destino)>a.peso.peso().doubleValue()+distanciaBase.doubleValue()){
-                    distanceMap.replace(a.destino, distanciaBase.doubleValue()+a.peso.peso().doubleValue());
+                if(distanceMap.get(a.destino)>a.peso.peso()+distanciaBase){
+                    distanceMap.replace(a.destino, distanciaBase+a.peso.peso());
                     caminhoNegado.put(a.destino, a);
                 }
-                System.out.println("Vim de "+a.origem+" "+vertice+" e Passei em: "+ a.destino+ " Distância: " +(a.getPeso().peso().doubleValue()+distanciaBase.doubleValue()) +" DistânciaNoMapa: "+ distanceMap.get(a.destino));
+                System.out.println("Vim de "+a.origem+" "+vertice+" e Passei em: "+ a.destino+ " Distância: " +(a.getPeso().peso()+distanciaBase) +" DistânciaNoMapa: "+ distanceMap.get(a.destino));
                     
             }
         }

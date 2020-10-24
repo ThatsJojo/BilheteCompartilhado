@@ -142,9 +142,10 @@ public class GrafoTest {
         grafo.addAresta(v3, v4, peso34);
         grafo.addAresta(v5, v4, peso54);
         ArrayList<Aresta> caminho =  grafo.menorCaminho(v0, v4);
+        
         for(int i = caminho.size()-1; i>=0;i--){
             Aresta a = caminho.get(i);
-            System.out.println("Origem: "+a.getOrigem()+" Destino: "+a.getDestino()+" peso:"+a.getPeso().peso().doubleValue());
+            System.out.println("Origem: "+a.getOrigem()+" Destino: "+a.getDestino()+" peso:"+a.getPeso().peso());
         }
     }
     
