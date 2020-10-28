@@ -4,8 +4,6 @@ import java.io.IOException;
 import java.util.LinkedList;
 import java.util.NoSuchElementException;
 import java.util.Random;
-import pbl.model.Conexao;
-import pbl.util.Contador;
 
 public class ThreadController {
     private static ArquivoController arquivoController;

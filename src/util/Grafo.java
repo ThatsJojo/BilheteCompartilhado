@@ -10,8 +10,8 @@ import java.util.Map;
 public class Grafo <V>{
     
     private final ArrayList<V> vertices;
-    private final ArrayList<Aresta> arestas;
-    private final ArrayList<ArrayList<Aresta>> bucketArestas;
+    private final ArrayList<Aresta<V>> arestas;
+    private final ArrayList<ArrayList<Aresta<V>>> bucketArestas;
 
     public Grafo() {
         vertices = new ArrayList();
@@ -41,14 +41,15 @@ public class Grafo <V>{
     }
     
     //Metodo para adicionar arrestas na lista de arestas
-    public void addAresta(V origem, V destino, Weighable peso) throws NotVerticeException{
+    public void addAresta(Aresta<V> aresta) throws NotVerticeException{
+        V origem = aresta.getOrigem();
+        V destino = aresta.getDestino();
         int indexOrigem = vertices.indexOf(origem);
         int indexDestino = vertices.indexOf(destino);
         if(indexOrigem < 0 || indexDestino < 0)
             throw new NotVerticeException();
-        Aresta a = new Aresta(vertices.get(indexOrigem), vertices.get(indexDestino), peso);
-        arestas.add(a);
-        bucketArestas.get(indexOrigem).add(a);
+        arestas.add(aresta);
+        bucketArestas.get(indexOrigem).add(aresta);
     }    
     
     //Metodo que irá retornar uma lista de adjacencias apartir de uma origem
@@ -57,8 +58,8 @@ public class Grafo <V>{
         if(indexOrigem < 0)
             throw new NotVerticeException();
         ArrayList<V> ret = new ArrayList();
-        for(Aresta a : bucketArestas.get(indexOrigem)){
-            ret.add(a.destino);
+        for(Aresta<V> a : bucketArestas.get(indexOrigem)){
+            ret.add(a.getDestino());
         }
         return ret.isEmpty() ? null : ret;
     }
@@ -70,7 +71,7 @@ public class Grafo <V>{
         if(indexOrigem<0 || indexDestino<0)
             throw new NotVerticeException();
         bucketArestas.get(indexOrigem).forEach((a)->{
-            if(a.destino.equals(destino) )
+            if(a.getDestino().equals(destino) )
                 ret.add(a);
         });
         return ret.isEmpty()?null:ret;
@@ -82,8 +83,8 @@ public class Grafo <V>{
         int indexDestino = vertices.indexOf(destino);
         if(indexOrigem < 0 || indexDestino < 0)
             throw new NotVerticeException();
-        for(Aresta a : bucketArestas.get(indexOrigem)){
-            if( a.origem.equals(origem)&& a.destino.equals(destino) ){
+        for(Aresta<V> a : bucketArestas.get(indexOrigem)){
+            if( a.getOrigem().equals(origem)&& a.getDestino().equals(destino) ){
                 return true;
             }
         }
@@ -95,8 +96,8 @@ public class Grafo <V>{
         if(indexOrigem<0)
             throw new NotVerticeException();
         int num = 0;
-        for(Aresta a: arestas){
-            if(a.destino.equals(vertice)){
+        for(Aresta<V> a: arestas){
+            if(a.getDestino().equals(vertice)){
                 num++;
             }
         }
@@ -115,7 +116,7 @@ public class Grafo <V>{
         return null;
     }
     
-    public ArrayList<Aresta> menorCaminho(V origem, V destino){
+    public ArrayList<Aresta<V>> menorCaminho(V origem, V destino) throws NotPathException{
         if(!this.containsVertice(origem)||!this.containsVertice(destino))
             return null;
         HashMap<V, Double> distanceMap = new HashMap<>();
@@ -138,13 +139,15 @@ public class Grafo <V>{
             calcularDistancias(maisProximo,passados,distanceMap,caminhoNegado);
             
         }
-        ArrayList<Aresta> ret = new ArrayList<>();
+        ArrayList<Aresta<V>> ret = new ArrayList<>();
         System.out.println("\n******************************************\n");
         V o = destino;
         while(!o.equals(origem)){
-            Aresta a = caminhoNegado.get(o);
+            Aresta<V> a = caminhoNegado.get(o);
+            if(a == null)
+                throw new NotPathException();
             ret.add(a);
-            o = a.origem;
+            o = a.getOrigem();
         }
         return ret;
     }
@@ -165,16 +168,16 @@ public class Grafo <V>{
     }
     
     private void calcularDistancias(V vertice, HashSet<V> passados, HashMap<V, Double> distanceMap, HashMap<V, Aresta> caminhoNegado){
-        ArrayList<Aresta> arestasVizinhos = bucketArestas.get(vertices.indexOf(vertice));
+        ArrayList<Aresta<V>> arestasVizinhos = bucketArestas.get(vertices.indexOf(vertice));
         HashSet<V> passadosAgora = new HashSet<>();
         Double distanciaBase = distanceMap.get(vertice);
-        for(Aresta a: arestasVizinhos){
-            if(!passados.contains(a.destino)){
-                if(distanceMap.get(a.destino)>a.peso.peso()+distanciaBase){
-                    distanceMap.replace(a.destino, distanciaBase+a.peso.peso());
-                    caminhoNegado.put(a.destino, a);
+        for(Aresta<V> a: arestasVizinhos){
+            if(!passados.contains(a.getDestino())){
+                if(distanceMap.get(a.getDestino())>a.getPeso()+distanciaBase){
+                    distanceMap.replace(a.getDestino(), distanciaBase+a.getPeso());
+                    caminhoNegado.put(a.getDestino(), a);
                 }
-                System.out.println("Vim de "+a.origem+" "+vertice+" e Passei em: "+ a.destino+ " Distância: " +(a.getPeso().peso()+distanciaBase) +" DistânciaNoMapa: "+ distanceMap.get(a.destino));
+                ///System.out.println("Vim de "+a.origem+" "+vertice+" e Passei em: "+ a.destino+ " Distância: " +(a.getPeso()+distanciaBase) +" DistânciaNoMapa: "+ distanceMap.get(a.destino));
                     
             }
         }
@@ -183,55 +186,16 @@ public class Grafo <V>{
     private Aresta arestaMaisProxima(V origem, V destino){
         if(origem == null)
             return null;
-        ArrayList<Aresta> candidatas = bucketArestas.get(vertices.indexOf(origem));
-        Aresta closer = null;
-        for(Aresta a: candidatas){
-            if(a.destino.equals(destino)){
+        ArrayList<Aresta<V>> candidatas = bucketArestas.get(vertices.indexOf(origem));
+        Aresta<V> closer = null;
+        for(Aresta<V> a: candidatas){
+            if(a.getDestino().equals(destino)){
                 if(closer == null)
                     closer = a;
-                else if(a.getPeso().compareTo(closer)<0)
+                else if(a.compareTo(closer)<0)
                     closer = a;
             }
         }
         return closer;
-    }
-    
-    
-    
-    public class Aresta {
-        
-        private V origem;
-        private V destino;
-        private Weighable peso;
-
-        public Aresta(V origem, V destino, Weighable peso) {
-            this.origem = origem;
-            this.destino = destino;
-            this.peso = peso;
-        }
-
-        public V getOrigem() {
-            return origem;
-        }
-
-        public void setOrigem(V origem) {
-            this.origem = origem;
-        }
-
-        public V getDestino() {
-            return destino;
-        }
-
-        public void setDestino(V destino) {
-            this.destino = destino;
-        }
-
-        public Weighable getPeso() {
-            return peso;
-        }
-
-        public void setPeso(Weighable peso) {
-            this.peso = peso;
-        }
     }
 }

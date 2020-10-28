@@ -3,28 +3,34 @@ package model;
 import java.util.LinkedList;
 
 public class Aeroporto {
+    private final String id;
+    private final LinkedList<Companhia> companhias;
+    private final LinkedList<Passageiro> passageiros;
 
-	private LinkedList<Companhia> listaCompanhias;
-	private LinkedList<Passageiro> listaPassageiros;
-	
-	public Aeroporto() {
-		this.listaCompanhias = listaCompanhias;
-		this.listaPassageiros = listaPassageiros;
-	}
+    public Aeroporto(String id) {
+        this.id = id;
+        companhias = new LinkedList();
+        passageiros = new LinkedList();
+    }
+    
+    @Override
+    public String toString(){
+        return "Aeroporto"+id;
+    }
+    
+    public void addCompanhia(Companhia c){
+        companhias.add(c);
+    }
+    
+    public void addPassageiro(Passageiro p){
+        passageiros.add(p);
+    }
+    
+    public LinkedList<Companhia> getListaCompanhias() {
+        return companhias;
+    }
 
-	public LinkedList<Companhia> getListaCompanhias() {
-		return listaCompanhias;
-	}
-
-	public void setListaCompanhias(LinkedList<Companhia> listaCompanhias) {
-		this.listaCompanhias = listaCompanhias;
-	}
-
-	public LinkedList<Passageiro> getListaPassageiros() {
-		return listaPassageiros;
-	}
-
-	public void setListaPassageiros(LinkedList<Passageiro> listaPassageiros) {
-		this.listaPassageiros = listaPassageiros;
-	}
+    public LinkedList<Passageiro> getListaPassageiros() {
+        return passageiros;
+    }
 }

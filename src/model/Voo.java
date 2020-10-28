@@ -1,11 +1,13 @@
 package model;
 
 import java.util.LinkedList;
+import util.Aresta;
+import util.Weighable;
 
-public class Voo {
-	
-	private String origem;
-	private String destino;
+public class Voo implements Aresta<Aeroporto>{
+	private Companhia dona;
+	private Aeroporto origem;
+	private Aeroporto destino;
 	private int id; 
 	private int numeroDePassageiros;
 	private LinkedList<Passageiro> passageiros;
@@ -13,7 +15,7 @@ public class Voo {
 	private double precoBase;
 	private String companhia;
 
-	public Voo(String origem, String destino, int id, int numeroDePassageiros, double precoBase) {
+	public Voo(Aeroporto origem, Aeroporto destino, int id, int numeroDePassageiros, double precoBase) {
 		this.origem = origem;
 		this.destino = destino;
 		this.id = id;
@@ -23,19 +25,12 @@ public class Voo {
 		this.precoBase = precoBase;
 	}
 
-	public String getOrigem() {
+	public Aeroporto getOrigem() {
 		return origem;
 	}
 
-	public void setOrigem(String origem) {
-		this.origem = origem;
-	}
-
-	public String getDestino() {
+	public Aeroporto getDestino() {
 		return destino;
-	}
-	public void setDestino(String destino) {
-		this.destino = destino;
 	}
 
 	public int getId() {
@@ -73,5 +68,18 @@ public class Voo {
 	public double getPrecoBase() {
 		return precoBase;
 	}
+
+    @Override
+    public Double getPeso() {
+        return this.precoBase-this.numeroDePassageiros;
+    }
+
+    @Override
+    public int compareTo(Object t) {
+        if (! (t instanceof Voo))
+            return Integer.MIN_VALUE ;
+        return this.id - ((Voo)t).id;
+        
+    }
 	
 }
