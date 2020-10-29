@@ -20,7 +20,7 @@ public class Semaforo{
     public void cadastrarRecurso(Aresta A, int resource){
         resources.put(A, resource);
     }
-    
+   
     public boolean down(Aresta A){
             System.out.println("Down");
             if(resources.get(A)>0){
