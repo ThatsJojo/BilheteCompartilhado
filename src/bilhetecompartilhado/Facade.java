@@ -34,10 +34,8 @@ public class Facade {
     public void realizarCompra(String nome, Aeroporto origem, Aeroporto destino){
         Passageiro atual = null;
         for(Passageiro p: usuarios){
-            if(p.getNome().equals(nome)){
+            if(p.getNome().equals(nome))
                 atual = p;
-                System.out.println("Comparando: "+p.getNome()+" e: "+nome);
-            }
         }
         if(atual == null)
             return;

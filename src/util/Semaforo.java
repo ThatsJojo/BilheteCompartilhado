@@ -21,17 +21,14 @@ public class Semaforo{
         resources.put(A, resource);
     }
     
-    public void down(Aresta A){
-        while(true){
+    public boolean down(Aresta A){
             System.out.println("Down");
             if(resources.get(A)>0){
                 resources.replace(A, resources.get(A)-1);
                 //System.out.println("Flag antes: "+flag+"   flag depois: "+ resources.get(A));
-                return;
-            }try {
-                Thread.sleep(200);
-            } catch (InterruptedException ex) {}
-        }
+                return true;
+            }
+            return false;
     }
     
     private synchronized void diminuir(Aresta A, int i){
