@@ -2,17 +2,16 @@ package model;
 
 import java.util.LinkedList;
 import util.Aresta;
-import util.Weighable;
 
 public class Voo implements Aresta<Aeroporto>{
 	private Companhia dona;
-	private Aeroporto origem;
-	private Aeroporto destino;
+	private final Aeroporto origem;
+	private final Aeroporto destino;
 	private int id; 
 	private int numeroDePassageiros;
 	private LinkedList<Passageiro> passageiros;
 	private LinkedList<Passagem> passagens;
-	private double precoBase;
+	private final double precoBase;
 	private String companhia;
 
 	public Voo(Aeroporto origem, Aeroporto destino, int id, int numeroDePassageiros, double precoBase) {
@@ -20,15 +19,17 @@ public class Voo implements Aresta<Aeroporto>{
 		this.destino = destino;
 		this.id = id;
 		this.numeroDePassageiros = numeroDePassageiros;
-		this.passageiros = new LinkedList<Passageiro>();
-		this.passagens = new LinkedList<Passagem>();
+		this.passageiros = new LinkedList<>();
+		this.passagens = new LinkedList<>();
 		this.precoBase = precoBase;
 	}
 
+        @Override
 	public Aeroporto getOrigem() {
 		return origem;
 	}
 
+        @Override
 	public Aeroporto getDestino() {
 		return destino;
 	}
@@ -52,18 +53,18 @@ public class Voo implements Aresta<Aeroporto>{
 	public LinkedList<Passageiro> getPassageiros() {
 		return passageiros;
 	}
-
-	public void setPassageiros(LinkedList<Passageiro> passageiros) {
-		this.passageiros = passageiros;
-	}
+        
+        public void cadastrarPassageiro(Passageiro e){
+            passageiros.add(e);
+        }
 
 	public LinkedList<Passagem> getPassagens() {
 		return passagens;
 	}
-
-	public void setPassagens(LinkedList<Passagem> passagens) {
-		this.passagens = passagens;
-	}
+        
+        public void cadastrarPassagem(Passagem p){
+            passagens.add(p);
+        }
 
 	public double getPrecoBase() {
 		return precoBase;
@@ -81,5 +82,32 @@ public class Voo implements Aresta<Aeroporto>{
         return this.id - ((Voo)t).id;
         
     }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 97 * hash + this.id;
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Voo other = (Voo) obj;
+        if (this.id != other.id) {
+            return false;
+        }
+        return true;
+    }
+    
+    
 	
 }

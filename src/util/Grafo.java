@@ -133,14 +133,12 @@ public class Grafo <V>{
         
         while(!naoPassados.isEmpty()){
             V maisProximo = verticeMaisProximo(naoPassados, distanceMap);
-            System.out.println("MaisProximo: "+maisProximo);
             passados.add(maisProximo);
             naoPassados.remove(maisProximo);
             calcularDistancias(maisProximo,passados,distanceMap,caminhoNegado);
             
         }
         ArrayList<Aresta<V>> ret = new ArrayList<>();
-        System.out.println("\n******************************************\n");
         V o = destino;
         while(!o.equals(origem)){
             Aresta<V> a = caminhoNegado.get(o);
