@@ -3,11 +3,13 @@ package util;
 import java.util.HashMap;
 
 public class Semaforo{
+    private final  HashMap<Aresta, Integer> totalResources;
     private final  HashMap<Aresta, Integer> resources;
     private static Semaforo uniqueInstance;
     
     private Semaforo(){
         this.resources = new HashMap();
+        this.totalResources = new HashMap();
     }
     
     public static synchronized Semaforo getInstance(){
@@ -19,20 +21,17 @@ public class Semaforo{
     
     public void cadastrarRecurso(Aresta A, int resource){
         resources.put(A, resource);
+        totalResources.put(A, resource);
     }
    
-    public boolean down(Aresta A){
-            System.out.println("Down");
-            if(resources.get(A)>0){
-                resources.replace(A, resources.get(A)-1);
-                //System.out.println("Flag antes: "+flag+"   flag depois: "+ resources.get(A));
-                return true;
-            }
-            return false;
-    }
-    
-    private synchronized void diminuir(Aresta A, int i){
-        resources.replace(A, i);
+    public synchronized boolean down(Aresta A){
+        int flag = resources.get(A);
+        if(resources.get(A)>0){
+            resources.replace(A, resources.get(A)-1);
+            //System.out.println("Flag antes: "+flag+"   flag depois: "+ resources.get(A));
+            return true;
+        }
+        return false;
     }
     
     public void up(Aresta A){

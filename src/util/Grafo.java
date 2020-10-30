@@ -1,22 +1,25 @@
 package util;
 
+import Exceptions.NotVerticeException;
+import Exceptions.NotPathException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
+import model.Aeroporto;
 
 
 public class Grafo <V>{
     
     private final ArrayList<V> vertices;
     private final ArrayList<Aresta<V>> arestas;
-    private final ArrayList<ArrayList<Aresta<V>>> bucketArestas;
+    private final HashMap<V, ArrayList<Aresta<V>>> bucketArestas;
 
     public Grafo() {
         vertices = new ArrayList();
         arestas = new ArrayList();
-        bucketArestas = new ArrayList();
+        bucketArestas = new HashMap();
     }
     
     public void addVertice(V vertice) throws NotVerticeException{
@@ -25,7 +28,7 @@ public class Grafo <V>{
         if(vertices.contains(vertice))
             return;
         vertices.add(vertice);
-        bucketArestas.add(new ArrayList());
+        bucketArestas.put(vertice, new ArrayList());
     }
     
     public boolean containsVertice(V vertice){
@@ -49,7 +52,7 @@ public class Grafo <V>{
         if(indexOrigem < 0 || indexDestino < 0)
             throw new NotVerticeException();
         arestas.add(aresta);
-        bucketArestas.get(indexOrigem).add(aresta);
+        bucketArestas.get(origem).add(aresta);
     }    
     
     //Metodo que irá retornar uma lista de adjacencias apartir de uma origem
@@ -58,19 +61,19 @@ public class Grafo <V>{
         if(indexOrigem < 0)
             throw new NotVerticeException();
         ArrayList<V> ret = new ArrayList();
-        for(Aresta<V> a : bucketArestas.get(indexOrigem)){
+        for(Aresta<V> a : bucketArestas.get(origem)){
             ret.add(a.getDestino());
         }
         return ret.isEmpty() ? null : ret;
     }
 
-    public ArrayList<Aresta> arestasEntre(V origem, V destino) throws NotVerticeException{
-        ArrayList<Aresta> ret = new ArrayList();
+    public ArrayList<Aresta<V>> arestasEntre(V origem, V destino) throws NotVerticeException{
+        ArrayList<Aresta<V>> ret = new ArrayList();
         int indexOrigem = vertices.indexOf(origem);
         int indexDestino = vertices.indexOf(destino);
         if(indexOrigem<0 || indexDestino<0)
             throw new NotVerticeException();
-        bucketArestas.get(indexOrigem).forEach((a)->{
+        bucketArestas.get(origem).forEach((a)->{
             if(a.getDestino().equals(destino) )
                 ret.add(a);
         });
@@ -83,7 +86,7 @@ public class Grafo <V>{
         int indexDestino = vertices.indexOf(destino);
         if(indexOrigem < 0 || indexDestino < 0)
             throw new NotVerticeException();
-        for(Aresta<V> a : bucketArestas.get(indexOrigem)){
+        for(Aresta<V> a : bucketArestas.get(origem)){
             if( a.getOrigem().equals(origem)&& a.getDestino().equals(destino) ){
                 return true;
             }
@@ -166,7 +169,7 @@ public class Grafo <V>{
     }
     
     private void calcularDistancias(V vertice, HashSet<V> passados, HashMap<V, Double> distanceMap, HashMap<V, Aresta> caminhoNegado){
-        ArrayList<Aresta<V>> arestasVizinhos = bucketArestas.get(vertices.indexOf(vertice));
+        ArrayList<Aresta<V>> arestasVizinhos = bucketArestas.get(vertice);
         HashSet<V> passadosAgora = new HashSet<>();
         Double distanciaBase = distanceMap.get(vertice);
         for(Aresta<V> a: arestasVizinhos){
@@ -175,7 +178,7 @@ public class Grafo <V>{
                     distanceMap.replace(a.getDestino(), distanciaBase+a.getPeso());
                     caminhoNegado.put(a.getDestino(), a);
                 }
-                ///System.out.println("Vim de "+a.origem+" "+vertice+" e Passei em: "+ a.destino+ " Distância: " +(a.getPeso()+distanciaBase) +" DistânciaNoMapa: "+ distanceMap.get(a.destino));
+                //System.out.println("Vim de "+a.getOrigem()+" "+vertice+" e Passei em: "+ a.getDestino()+ " Distância: " +(a.getPeso()+distanciaBase) +" DistânciaNoMapa: "+ distanceMap.get(a.getDestino()));
                     
             }
         }
@@ -184,7 +187,7 @@ public class Grafo <V>{
     private Aresta arestaMaisProxima(V origem, V destino){
         if(origem == null)
             return null;
-        ArrayList<Aresta<V>> candidatas = bucketArestas.get(vertices.indexOf(origem));
+        ArrayList<Aresta<V>> candidatas = bucketArestas.get(origem);
         Aresta<V> closer = null;
         for(Aresta<V> a: candidatas){
             if(a.getDestino().equals(destino)){
@@ -196,4 +199,59 @@ public class Grafo <V>{
         }
         return closer;
     }
+
+    public ArrayList<ArrayList<V>> getRotas(V origem, V destino) throws NotVerticeException {
+        if(!vertices.contains(origem)||!vertices.contains(destino)){
+            throw new NotVerticeException();
+        }
+        HashMap<Double, ArrayList<V>> caminhos = new HashMap();
+        HashSet<V> passados = new HashSet();
+        HashSet<V> naoPassados = new HashSet();
+        vertices.forEach((vertice)->{
+            naoPassados.add(vertice);
+        });
+        
+        ArrayList<Aresta<V>> adjacenciasOrigem = bucketArestas.get(origem);
+        passados.add(origem);
+        for(int i = 0; i<adjacenciasOrigem.size();i++){
+            Aresta<V> aresta = adjacenciasOrigem.get(i);
+            V adjacente = aresta.getDestino();
+            ArrayList<V> caminhoAtual = new ArrayList();
+            caminhoAtual.add(origem);
+            buscaRecursiva(adjacente, destino, passados, naoPassados, caminhos, aresta.getPeso(),caminhoAtual);
+        }
+        ArrayList<ArrayList<V>> ret = new ArrayList();
+        caminhos.forEach((Double u, ArrayList<V> t) -> {
+            //System.out.println("Peso: "+u);
+            ret.add(t);
+        });
+        return ret;
+    }
+    
+    private ArrayList<V> copiaDe(ArrayList<V> caminhoAtual){
+        ArrayList<V> ret = new ArrayList();
+        for(int i =0; i<caminhoAtual.size(); i++){
+            ret.add(caminhoAtual.get(i));
+        }
+        return ret;
+    }
+    
+    public void buscaRecursiva(V origem, V destino, HashSet<V> passados, HashSet<V> naoPassados, HashMap<Double, ArrayList<V>> caminhos, Double tamanho, ArrayList<V> caminhoAtual){
+        if(origem.equals(destino)){
+            ArrayList<V> ret = copiaDe(caminhoAtual);
+            ret.add(origem);
+            caminhos.put(tamanho,ret);
+            return;
+        }
+        passados.add(origem);
+        caminhoAtual.add(origem);
+        bucketArestas.get(origem).forEach((aresta)->{
+            V prox = aresta.getDestino();
+            if(!passados.contains(prox)){
+                buscaRecursiva(prox, destino, passados, naoPassados,caminhos, tamanho+aresta.getPeso(), copiaDe(caminhoAtual));
+            }
+            passados.remove(origem);
+        });
+    }    
+    
 }

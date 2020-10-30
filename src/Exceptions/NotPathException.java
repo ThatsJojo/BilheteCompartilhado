@@ -1,5 +1,5 @@
 
-package util;
+package Exceptions;
 
 
 public class NotPathException extends Exception{
