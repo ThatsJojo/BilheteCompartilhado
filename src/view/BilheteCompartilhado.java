@@ -8,6 +8,8 @@ import model.Voo;
 import util.Contador;
 import Exceptions.NotPathException;
 import Exceptions.NotVerticeException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import model.Companhia;
 import model.Viagem;
 
@@ -96,20 +98,38 @@ public class BilheteCompartilhado {
 //        caminho.forEach((a) ->{
 //            System.out.println("Origem: "+a.getOrigem()+" Destino: "+a.getDestino()+" peso:"+a.getPeso());
 //        });
-        
+        try {
+            ArrayList<ArrayList<Aeroporto>> rotas = f.getRotas(v0, v4);
+            
+            for(int i = 0; i<rotas.size(); i++){
+                System.out.println("Rota "+i+": ");
+                ArrayList<Aeroporto> t = rotas.get(i);
+                t.forEach((Aeroporto aeroporto) -> {
+                    System.out.println("Aeroporto: "+aeroporto.toString());
+                });
+            }
+        } catch (NotVerticeException ex) {}
+
         ViewPassageiro clientes[] = new ViewPassageiro[10];
         for(int i = 0; i<10; i++){
-            clientes[i] = new ViewPassageiro("Cliente "+i, TEMPOCOMPRA);
+            clientes[i] = new ViewPassageiro("Cliente "+i, TEMPOCOMPRA+1);
             clientes[i].realizarCompra(v0, v4);
         }
         
         System.out.println("As compras serão iniciadas em: ");
         while(Contador.getInstance().getAbsoluteTime()<TEMPOCOMPRA+2){
             try {
+                Thread.sleep(250);
                 if(Contador.getInstance().getAbsoluteTime()<TEMPOCOMPRA){
-                    System.out.print(TEMPOCOMPRA-Contador.getInstance().getAbsoluteTime());
+                    System.out.print(" "+(TEMPOCOMPRA-Contador.getInstance().getAbsoluteTime()));
+                    for(int i = 0; i<3;i++){
+                    Thread.sleep(250);
+                        System.out.print(".");
+                    }
+                }else{
+                    //System.out.println("\n");
                 }
-                Thread.sleep(200);
+                
             } catch (InterruptedException ex) {}
         }
         System.out.println("\n \n****************************************");
@@ -123,6 +143,5 @@ public class BilheteCompartilhado {
         }
         
         Contador.getInstance().stop();
-       
     }
 }

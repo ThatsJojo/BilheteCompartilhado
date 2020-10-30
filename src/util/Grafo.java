@@ -221,12 +221,49 @@ public class Grafo <V>{
             buscaRecursiva(adjacente, destino, passados, naoPassados, caminhos, aresta.getPeso(),caminhoAtual);
         }
         ArrayList<ArrayList<V>> ret = new ArrayList();
+        ArrayList<ComparablePath> retPaths = new ArrayList(caminhos.size());
         caminhos.forEach((Double u, ArrayList<V> t) -> {
             //System.out.println("Peso: "+u);
-            ret.add(t);
+            retPaths.add(new ComparablePath(t, u));
         });
+        
+        sort(retPaths);
+        for(int i = 0; i<retPaths.size(); i++){
+            ret.add(retPaths.get(i).V);
+        }
         return ret;
     }
+    
+    private void sort(ArrayList<ComparablePath> array){
+        for (int i = 1; i < array.size(); i++) {
+            ComparablePath current = array.get(i);
+            int j = i - 1;
+            while(j >= 0 && current.compareTo(array.get(j))<0) {
+                array.set(j+1, array.get(j));
+                j--;
+            }
+            array.set(j+1, current);
+        }
+    }
+    
+    private class ComparablePath implements Comparable{
+
+        public ComparablePath(ArrayList<V> V, Double u) {
+            this.V = V;
+            this.u = u;
+        }
+        
+        
+        ArrayList<V> V;
+        Double u;
+
+        @Override
+        public int compareTo(Object t) {
+            return u.intValue()-((ComparablePath)t).u.intValue();
+        }
+    }
+    
+    
     
     private ArrayList<V> copiaDe(ArrayList<V> caminhoAtual){
         ArrayList<V> ret = new ArrayList();
