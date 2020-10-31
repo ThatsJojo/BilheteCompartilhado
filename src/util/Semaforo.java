@@ -34,9 +34,9 @@ public class Semaforo{
         return false;
     }
     
-    public void up(Aresta A){
+    public synchronized void up(Aresta A){
         Integer flag = resources.get(A);
-        resources.replace(A, flag++);
+        resources.replace(A, resources.get(A)+1);
     }
     
 }

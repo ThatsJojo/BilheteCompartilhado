@@ -99,6 +99,7 @@ public class ViewPassageiro extends Thread {
                             System.out.println("Passageiro não cadastrado.");
                         } catch (NotPassException ex) {
                             System.out.println(this.passageiro.getNome()+" não conseguiu comprar passagem para o voo" +voo.getId()+" Entre "+voo.getOrigem()+" e "+voo.getDestino()+" da companhia "+voo.getCompanhia().getNome()+".");
+                            conseguiuComprar=false;
                         }
                     }else{
                         comprando = false;
@@ -139,8 +140,8 @@ public class ViewPassageiro extends Thread {
                         rotaLivre = false;
                     }else{
                         try {
-                            System.out.println(this.passageiro.getNome()+" recebeu um voo que estava travado por deadLock. ID "+voo.getId()+" entre "+p.getVoo().getOrigem()+" e "+p.getVoo().getDestino()+" da companhia "+voo.getCompanhia().getNome()+" ID da passagem: "+p.getId());
                             p = f.realizarCompra(this.passageiro.getIdPassageiro(), voo, viagem);
+                            System.out.println(this.passageiro.getNome()+" recebeu um voo que estava travado por deadLock. ID "+voo.getId()+" entre "+voo.getOrigem()+" e "+voo.getDestino()+" da companhia "+voo.getCompanhia().getNome()+" ID da passagem: "+p.getId());
                         } catch (NotPassageiroException | NotPassException ex){
                             rotaLivre = false;
                         }

@@ -49,8 +49,10 @@ public class PiveteDosDeadLock {
         try {
             Thread.sleep(100);
         } catch (InterruptedException ex) {}
-        for(int i = 0;getUsing()||(!passageirosProblematicos.getFirst().equals(passageiro)&&!roubados.get(passageiro)[0]&&i<20);i++ ){
+        for(int i = 0;(getUsing()||!passageirosProblematicos.getFirst().equals(passageiro))&&!roubados.get(passageiro)[0]&&i<20;i++ ){
             try {
+                if(i>20)
+                    System.out.println("DEU UMA MERDA MUUUITO GRANDE");
                 Thread.sleep(10);
             } catch (InterruptedException ex) {
                 System.out.println("Erro no controlador de DeadLocks");
@@ -75,6 +77,7 @@ public class PiveteDosDeadLock {
                     viagens.remove(passageiro);
                     roubados.remove(passageiro);
                     Facade.getInstance().devolverPassagem(passagem, v.getId());
+                    System.out.println("*A passagem do passageiro "+v.getDono().getNome()+" entre "+passagem.getVoo().getOrigem()+" e "+passagem.getVoo().getDestino()+" foi devolvida em favor do passageiro "+passageiro.getNome()+"*");
                     boolean replace[] = {true};
                     roubados.replace(p, replace);
                     using = false;

@@ -40,50 +40,50 @@ public class BilheteCompartilhado {
         }
         try {
             Voo peso01 = f.cadastrarVoo(v0, v1, 5, 4, companhia);
-            Voo peso07 = f.cadastrarVoo(v0, v7, 5, 8, companhia);
+            Voo peso07 = f.cadastrarVoo(v0, v7, 1, 8, companhia);
             Voo peso12 = f.cadastrarVoo(v1, v2, 5, 8, companhia);
             Voo peso17 = f.cadastrarVoo(v1, v7, 5, 11, companhia);
             Voo peso78 = f.cadastrarVoo(v7, v8, 5, 7, companhia);
-            Voo peso76 = f.cadastrarVoo(v7, v6, 5, 1, companhia);
+            Voo peso76 = f.cadastrarVoo(v7, v6, 1, 1, companhia);
             Voo peso68 = f.cadastrarVoo(v6, v8, 5, 6, companhia);
             Voo peso28 = f.cadastrarVoo(v2, v8, 5, 2, companhia);
             Voo peso25 = f.cadastrarVoo(v2, v5, 5, 4, companhia);
-            Voo peso65 = f.cadastrarVoo(v6, v5, 2, 2, companhia);
+            Voo peso65 = f.cadastrarVoo(v6, v5, 1, 2, companhia);
             Voo peso23 = f.cadastrarVoo(v2, v3, 5, 7, companhia);
             Voo peso53 = f.cadastrarVoo(v5, v3, 5, 14, companhia);
             Voo peso34 = f.cadastrarVoo(v3, v4, 5, 9, companhia);
-            Voo peso54 = f.cadastrarVoo(v5, v4, 5, 10, companhia);
+            Voo peso54 = f.cadastrarVoo(v5, v4, 1, 10, companhia);
             
             Voo peso01c1 = f.cadastrarVoo(v0, v1, 5, 4, companhia1);
-            Voo peso07c1 = f.cadastrarVoo(v0, v7, 5, 8, companhia1);
+            Voo peso07c1 = f.cadastrarVoo(v0, v7, 1, 8, companhia1);
             Voo peso12c1 = f.cadastrarVoo(v1, v2, 5, 8, companhia1);
             Voo peso17c1 = f.cadastrarVoo(v1, v7, 5, 11, companhia1);
             Voo peso78c1 = f.cadastrarVoo(v7, v8, 5, 7, companhia1);
-            Voo peso76c1 = f.cadastrarVoo(v7, v6, 5, 1, companhia1);
+            Voo peso76c1 = f.cadastrarVoo(v7, v6, 1, 1, companhia1);
             Voo peso68c1 = f.cadastrarVoo(v6, v8, 5, 6, companhia1);
             Voo peso28c1 = f.cadastrarVoo(v2, v8, 5, 2, companhia1);
             Voo peso25c1 = f.cadastrarVoo(v2, v5, 5, 4, companhia1);
-            Voo peso65c1 = f.cadastrarVoo(v6, v5, 2, 2, companhia1);
+            Voo peso65c1 = f.cadastrarVoo(v6, v5, 1, 2, companhia1);
             Voo peso23c1 = f.cadastrarVoo(v2, v3, 5, 7, companhia1);
             Voo peso53c1 = f.cadastrarVoo(v5, v3, 5, 14, companhia1);
             Voo peso34c1 = f.cadastrarVoo(v3, v4, 5, 9, companhia1);
-            Voo peso54c1 = f.cadastrarVoo(v5, v4, 5, 10, companhia1);
+            Voo peso54c1 = f.cadastrarVoo(v5, v4, 1, 10, companhia1);
             
             
             Voo peso01c2 = f.cadastrarVoo(v0, v1, 5, 4, companhia2);
-            Voo peso07c2 = f.cadastrarVoo(v0, v7, 5, 8, companhia2);
+            Voo peso07c2 = f.cadastrarVoo(v0, v7, 1, 8, companhia2);
             Voo peso12c2 = f.cadastrarVoo(v1, v2, 5, 8, companhia2);
             Voo peso17c2 = f.cadastrarVoo(v1, v7, 5, 11, companhia2);
             Voo peso78c2 = f.cadastrarVoo(v7, v8, 5, 7, companhia2);
-            Voo peso76c2 = f.cadastrarVoo(v7, v6, 5, 1, companhia2);
+            Voo peso76c2 = f.cadastrarVoo(v7, v6, 1, 1, companhia2);
             Voo peso68c2 = f.cadastrarVoo(v6, v8, 5, 6, companhia2);
             Voo peso28c2 = f.cadastrarVoo(v2, v8, 5, 2, companhia2);
             Voo peso25c2 = f.cadastrarVoo(v2, v5, 5, 4, companhia2);
-            Voo peso65c2 = f.cadastrarVoo(v6, v5, 2, 2, companhia2);
+            Voo peso65c2 = f.cadastrarVoo(v6, v5, 1, 2, companhia2);
             Voo peso23c2 = f.cadastrarVoo(v2, v3, 5, 7, companhia2);
             Voo peso53c2 = f.cadastrarVoo(v5, v3, 5, 14, companhia2);
             Voo peso34c2 = f.cadastrarVoo(v3, v4, 5, 9, companhia2);
-            Voo peso54c2 = f.cadastrarVoo(v5, v4, 5, 10, companhia2);
+            Voo peso54c2 = f.cadastrarVoo(v5, v4, 1, 10, companhia2);
         } catch (NotVerticeException ex) {
             
         }
@@ -117,15 +117,16 @@ public class BilheteCompartilhado {
         }
         
         System.out.println("As compras serão iniciadas em: ");
-        while(Contador.getInstance().getAbsoluteTime()<TEMPOCOMPRA+2){
+        while(Contador.getInstance().getAbsoluteTime()<TEMPOCOMPRA+4){
             try {
                 Thread.sleep(250);
                 if(Contador.getInstance().getAbsoluteTime()<TEMPOCOMPRA){
-                    System.out.print(" "+(TEMPOCOMPRA-Contador.getInstance().getAbsoluteTime()));
+                    System.out.print(""+(TEMPOCOMPRA-Contador.getInstance().getAbsoluteTime()));
                     for(int i = 0; i<3;i++){
                     Thread.sleep(250);
                         System.out.print(".");
                     }
+                    System.out.println(" ");
                 }else{
                     //System.out.println("\n");
                 }
