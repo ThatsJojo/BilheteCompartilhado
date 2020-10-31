@@ -11,7 +11,7 @@ import model.Voo;
 import Exceptions.NotVerticeException;
 import Exceptions.NotVooException;
 import java.util.Random;
-import model.PiveteDosDeadLock;
+import model.ControladorDeadLocks;
 import model.Viagem;
 import util.Contador;
 
@@ -109,8 +109,8 @@ public class ViewPassageiro extends Thread {
                 }
                 if(!conseguiuComprar){
                     System.out.println(this.passageiro.getNome()+" está esperando por recursos travados por deadlock. Origem do voo desejado: "+origem+" destino:  "+destino);
-                    PiveteDosDeadLock.getInstance().cadastrarProblematico(passageiro, viagem);
-                    voo = PiveteDosDeadLock.getInstance().roubarRecursos(origem, destino, this.passageiro);
+                    ControladorDeadLocks.getInstance().cadastrarProblematico(passageiro, viagem);
+                    voo = ControladorDeadLocks.getInstance().roubarRecursos(origem, destino, this.passageiro);
                     if(voo == null){
                         System.out.println(this.passageiro.getNome()+" não conseguiu recursos travados por DeadLock" );
                         final ArrayList<Aeroporto> proxRota = k<rotas.size()-1?rotas.get(k+1):null;

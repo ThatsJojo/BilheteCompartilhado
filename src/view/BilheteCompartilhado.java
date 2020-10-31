@@ -6,10 +6,7 @@ import model.Aeroporto;
 import model.Passageiro;
 import model.Voo;
 import util.Contador;
-import Exceptions.NotPathException;
 import Exceptions.NotVerticeException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import model.Companhia;
 import model.Viagem;
 

@@ -7,23 +7,23 @@ import java.util.LinkedList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class PiveteDosDeadLock {
+public class ControladorDeadLocks {
     private final HashMap<Passageiro, Viagem> viagens;
     private final HashMap<Passageiro, boolean[]> roubados;
     private final LinkedList<Passageiro> passageirosProblematicos;
-    private static PiveteDosDeadLock piveteDosDeadLock;
+    private static ControladorDeadLocks piveteDosDeadLock;
     private boolean using;
     
-    private PiveteDosDeadLock(){
+    private ControladorDeadLocks(){
         viagens = new HashMap();
         passageirosProblematicos = new LinkedList();
         roubados = new HashMap();
         using = false;
     }
     
-    public static synchronized PiveteDosDeadLock getInstance(){
+    public static synchronized ControladorDeadLocks getInstance(){
         if(piveteDosDeadLock == null)
-            piveteDosDeadLock = new PiveteDosDeadLock();
+            piveteDosDeadLock = new ControladorDeadLocks();
         return piveteDosDeadLock;
     }
     
@@ -51,8 +51,6 @@ public class PiveteDosDeadLock {
         } catch (InterruptedException ex) {}
         for(int i = 0;(getUsing()||!passageirosProblematicos.getFirst().equals(passageiro))&&!roubados.get(passageiro)[0]&&i<20;i++ ){
             try {
-                if(i>20)
-                    System.out.println("DEU UMA MERDA MUUUITO GRANDE");
                 Thread.sleep(10);
             } catch (InterruptedException ex) {
                 System.out.println("Erro no controlador de DeadLocks");
